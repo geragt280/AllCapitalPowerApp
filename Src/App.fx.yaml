@@ -1,0 +1,60 @@
+App As appinfo:
+    BackEnabled: =true
+    OnStart: |-
+        =/*ClearCollect(
+            newFixAssetItem,
+            {
+                '#': false,
+                'FA Category': "FA Category",
+                'Fixed Asset Description': "Fixed Asset Description",
+                'Useful Life (months)': "Useful Life (months)",
+                Index: 0
+            }
+        )*/
+        Set(varFACategoryChoices, Choices([@'Fixed Assets'].'FA Category'));
+        
+        If(!IsBlank(SharePointIntegration.Selected),
+            //Here the datafield on new List will arrive
+            Clear(ExistingFixedAssitCollection);
+            Clear(colExistingAssests);
+            Clear(AllSelectedExistingAssits);
+            ClearCollect(ExistingFixedAssitCollection, SharePointIntegration.Selected.'Existing Fixed Assets');
+            ForAll(ExistingFixedAssitCollection,
+                Collect(AllSelectedExistingAssits,
+                    LookUp('Existing Assets', ID = Id)
+                );
+            );
+            ForAll(AllSelectedExistingAssits,        
+                Collect(colExistingAssests,
+                    {
+                        Id: ThisRecord.ID,
+                        '#': false,
+                        EditMode: false,
+                        FixedAssetDesc: ThisRecord.Title,
+                        MachineNum: 0 + ThisRecord.'Machine number',
+                        HistoricNum: 0 + ThisRecord.'Historic project number',
+                        Action: ThisRecord.Action,
+                        Age: ThisRecord.'Age (Years)',
+                        NetValue: ThisRecord.'Net book value'
+                    }
+                );
+            );
+        );
+    Theme: =PowerAppsTheme
+
+    Host As hostControl.DefaultHostControlVariant:
+        OnCancel: =false
+        OnEdit: =false
+        OnNew: =false
+        OnSave: =false
+        OnView: =false
+
+    SharePointIntegration As hostControl.SharePointHostControlVariant:
+        DataSource: =[@'All Capital Requests']
+        OnCancel: =ResetForm(frnGeneral)
+        OnEdit: =EditForm(frnGeneral)
+        OnNew: =NewForm(frnGeneral)
+        OnSave: =SubmitForm(frnGeneral)
+        OnView: =ViewForm(frnGeneral)
+        SelectedHidden: =LookUp([@'All Capital Requests'], ID = Self.SelectedListItemID)
+
