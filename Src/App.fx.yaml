@@ -1,0 +1,90 @@
+App As appinfo:
+    BackEnabled: =true
+    OnStart: |-
+        =/*ClearCollect(
+            newFixAssetItem,
+            {
+                '#': false,
+                'FA Category': "FA Category",
+                'Fixed Asset Description': "Fixed Asset Description",
+                'Useful Life (months)': "Useful Life (months)",
+                Index: 0
+            }
+        )*/
+        Set(varFACategoryChoices, Choices([@'Fixed Assets'].'FA Category '))
+    Theme: =PowerAppsTheme
+
+    Host As hostControl.DefaultHostControlVariant:
+        OnCancel: =false
+        OnEdit: =false
+        OnNew: =false
+        OnSave: =false
+        OnView: =false
+
+    SharePointIntegration As hostControl.SharePointHostControlVariant:
+        DataSource: =[@'All Capital Requests']
+        OnCancel: =ResetForm(frnGeneral)
+        OnEdit: =EditForm(frnGeneral)
+        OnNew: =NewForm(frnGeneral)
+        OnSave: |-
+            =If(
+                IsBlank(txtSpareParts.Text),
+                Set(
+                    varErrSpareParts,
+                    true
+                );
+                Notify(
+                    "Please fill All Mendetory Fields",
+                    NotificationType.Error
+                ),
+                txtExtimatedCost.Text = "" || IsBlank(txtExtimatedCost.Text),
+                Set(
+                    varErrtxtExtimatedCost,
+                    true
+                );
+                Notify(
+                    "Please fill All Mendetory Fields",
+                    NotificationType.Error
+                ),
+                drpPeriodType.SelectedText.Value = "Select",
+                Set(
+                    varErrPeriodType,
+                    true
+                );
+                Notify(
+                    "Please fill All Mendetory Fields",
+                    NotificationType.Error
+                ),
+                DataCardValue25.Selected.Value <> "Three+" && IsBlank(txtQuoteJust.Text),
+                Set(
+                    varTxtQJInValid,
+                    true
+                );
+                Notify(
+                    "Please fill All Mendetory Fields",
+                    NotificationType.Error
+                ),
+                varPaybackRequired = true && IsBlank(txtPayback.Text),
+                Set(
+                    varTxtpaybackInvalid,
+                    true
+                );
+                Notify(
+                    "Please fill All Mendetory Fields",
+                    NotificationType.Error
+                ),
+                varROIRequird = true && IsBlank(txtROI.Text),
+                Set(
+                    varROIInvalid,
+                    true
+                );
+                Notify(
+                    "Please fill All Mendetory Fields",
+                    NotificationType.Error
+                ),
+                SubmitForm(frnGeneral)
+                   // Notify("Please Fix all the Errors",NotificationType.Error)
+            )
+        OnView: =ViewForm(frnGeneral)
+        SelectedHidden: =LookUp([@'All Capital Requests'], ID = Self.SelectedListItemID)
+

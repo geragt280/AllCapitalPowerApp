@@ -1,0 +1,45 @@
+{
+  "ed71c286-a5c4-4b4c-a0db-2228c18608ef": {
+    "appActions": [
+      "providers/PowerPlatform.Governance/Operations/Read",
+      "providers/PowerPlatform.Governance/Operations/Write",
+      "providers/PowerPlatform.Governance/Operations/Delete"
+    ],
+    "connectionRef": {
+      "apiTier": "Standard",
+      "bypassConsent": true,
+      "displayName": "SharePoint",
+      "iconUri": "https://connectoricons-prod.azureedge.net/releases/v1.0.1664/1.0.1664.3477/sharepointonline/icon.png",
+      "id": "/providers/microsoft.powerapps/apis/shared_sharepointonline",
+      "parameterHints": {},
+      "parameterHintsV2": {}
+    },
+    "datasets": {
+      "https://slickwhiz.sharepoint.com/sites/TeamDevelopment": {
+        "dataSources": {
+          "All Capital Requests": {
+            "tableName": "1ea075a0-661c-4301-9ef5-f6bb8b613dae"
+          },
+          "Calendar": {
+            "tableName": "55e1f0dd-bfbf-4353-bedf-7359c77f9054"
+          },
+          "Cost (All Capital request)": {
+            "tableName": "ab819a95-5925-4247-bfad-37936cbe7acd"
+          },
+          "Fixed Assets": {
+            "tableName": "e3f3d998-6dc6-479a-86da-6dba44a95c38"
+          }
+        }
+      }
+    },
+    "dataSources": [
+      "All Capital Requests",
+      "Calendar",
+      "Cost (All Capital request)",
+      "Fixed Assets"
+    ],
+    "dependencies": {},
+    "dependents": [],
+    "id": "ed71c286-a5c4-4b4c-a0db-2228c18608ef"
+  }
+}
